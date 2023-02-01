@@ -10,7 +10,7 @@ end tb_toplevel_CPU;
 
 architecture tb of tb_toplevel_CPU is
 
-    component toplevel_CPU
+    component CPU
         port (clk   : in std_logic;
               reset : in std_logic;
               ce    : in std_logic);
@@ -26,7 +26,7 @@ architecture tb of tb_toplevel_CPU is
 
 begin
 
-    dut : toplevel_CPU
+    dut : CPU
     port map (clk   => clk,
               reset => reset,
               ce    => ce);

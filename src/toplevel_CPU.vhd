@@ -31,13 +31,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity toplevel_CPU is
- Port ( clk                  : in STD_LOGIC;
-       reset                : in STD_LOGIC;
-       ce                   : in STD_LOGIC);
-end toplevel_CPU;
+entity CPU is
+ Port ( Clk                  : in STD_LOGIC;
+       Reset                : in STD_LOGIC;
+       Ce                   : in STD_LOGIC;
+       Adr                   : out STD_LOGIC;
+       data_mem_in                   : out STD_LOGIC;
+       data_mem_out                   : out STD_LOGIC);
+end CPU;
 
-architecture Behavioral of toplevel_CPU is
+architecture Behavioral of CPU is
 component UC
     port (clk           : in std_logic;
           reset         : in std_logic;
@@ -100,7 +103,7 @@ uc_inst : UC
               ce            => ce,
               carry         => output_carry_UT,
               instruction   => output_MEMORY,
-              load_reg_data => load_reg_data_UC,--fetch coté UT
+              load_reg_data => load_reg_data_UC,--fetch cotÃ© UT
               sel_ual       => sel_ual_UC,
               load_accu     => load_accu_UC,
               load_carry    => load_carry_UC,
