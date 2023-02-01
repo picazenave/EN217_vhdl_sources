@@ -35,9 +35,11 @@ entity CPU is
  Port ( Clk                  : in STD_LOGIC;
        Reset                : in STD_LOGIC;
        Ce                   : in STD_LOGIC;
-       Adr                   : out STD_LOGIC;
-       data_mem_in                   : out STD_LOGIC;
-       data_mem_out                   : out STD_LOGIC);
+       mem_adr                   : out std_logic_vector (5 downto 0);
+       data_mem_in                   : out std_logic_vector (7 downto 0); --data to memory
+       data_mem_out                   : in std_logic_vector (7 downto 0);--data from memory
+       mem_rw      : out std_logic;
+       mem_enable  : out std_logic);
 end CPU;
 
 architecture Behavioral of CPU is
@@ -61,10 +63,7 @@ signal load_reg_data_UC : std_logic;
 signal sel_ual_UC       : std_logic;
 signal load_accu_UC     : std_logic;
 signal load_carry_UC    : std_logic;
-signal init_carry_UC    : std_logic;
-signal r_w_UC           : std_logic;
-signal enable_memory_UC : std_logic;
-signal adress_UC        : std_logic_vector (5 downto 0);                       
+signal init_carry_UC    : std_logic;                     
 ---------------------------------
 component UT
     port (reset        : in std_logic;
@@ -82,18 +81,7 @@ end component;
 signal input_UT     : std_logic_vector (7 downto 0);
 signal internal_output_UT    : std_logic_vector (7 downto 0);
 signal output_carry_UT : std_logic;
----------------------------------------
-component Memory
-    port (clk     : in std_logic;
-          ce      : in std_logic;
-          rw      : in std_logic;
-          enable  : in std_logic;
-          address : in std_logic_vector (5 downto 0);
-          input   : in std_logic_vector (7 downto 0);
-          output  : out std_logic_vector (7 downto 0));
-end component;
 
-signal output_MEMORY  : std_logic_vector (7 downto 0);
 begin
 
 
@@ -102,15 +90,15 @@ uc_inst : UC
               reset         => reset,
               ce            => ce,
               carry         => output_carry_UT,
-              instruction   => output_MEMORY,
-              load_reg_data => load_reg_data_UC,--fetch cotÃ© UT
+              instruction   => data_mem_out,
+              load_reg_data => load_reg_data_UC,--fetch coté UT
               sel_ual       => sel_ual_UC,
               load_accu     => load_accu_UC,
               load_carry    => load_carry_UC,
               init_carry    => init_carry_UC,
-              r_w           => r_w_UC,
-              enable_memory => enable_memory_UC,
-              adress        => adress_UC);
+              r_w           => mem_rw,
+              enable_memory => mem_enable,
+              adress        => mem_adr);
 
 ut_inst : UT
     port map (reset        => reset,
@@ -121,17 +109,20 @@ ut_inst : UT
               load_accu    => load_accu_UC,
               init_carry   => init_carry_UC,
               sel_UAL      => sel_ual_UC,
-              input_UT     => output_MEMORY,
+              input_UT     => data_mem_out,
               output_UT    => internal_output_UT,
               output_carry => output_carry_UT);
 
-mem_inst : Memory
-    port map (clk     => clk,
-              ce      => ce,
-              rw      => r_w_UC,
-              enable  => enable_memory_UC,
-              address => adress_UC,
-              input   => internal_output_UT,
-              output  => output_MEMORY);
+--mem_inst : Memory
+--    port map (clk     => clk,
+--              ce      => ce,
+--              rw      => r_w_UC,
+--              enable  => enable_memory_UC,
+--              address => adress_UC,
+--              input   => internal_output_UT,
+--              output  => output_MEMORY);
+
+              
+data_mem_in <=internal_output_UT;                  
 
 end Behavioral;

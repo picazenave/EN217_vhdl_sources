@@ -69,7 +69,7 @@ signal input_fetch  : std_logic_vector(7 downto 0);
 signal output_fetch : std_logic_vector(7 downto 0);
 --- 
 --signal load_accu  : std_logic;
-signal init_accu  : std_logic;
+signal init_accu  : std_logic :='0';
 signal input_accu  : std_logic_vector(7 downto 0);
 signal output_accu : std_logic_vector(7 downto 0); 
 ---
