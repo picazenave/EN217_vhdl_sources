@@ -2,10 +2,10 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity Mux is
-    Port ( input_0 : in STD_LOGIC_VECTOR(5 DOWNTO 0);
-           input_1 : in STD_LOGIC_VECTOR(5 DOWNTO 0);
+    Port ( input_0 : in STD_LOGIC_VECTOR(27 DOWNTO 0);
+           input_1 : in STD_LOGIC_VECTOR(27 DOWNTO 0);
            input_select : in STD_LOGIC;
-           output : out STD_LOGIC_VECTOR(5 DOWNTO 0));
+           output : out STD_LOGIC_VECTOR(27 DOWNTO 0));
 end Mux;
 
 architecture Behavioral of Mux is

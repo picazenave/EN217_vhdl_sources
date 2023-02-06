@@ -37,21 +37,21 @@ entity Reg_8b is
            ce : in STD_LOGIC;
            load : in STD_LOGIC;
            init : in STD_LOGIC;
-           input : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-           output : out STD_LOGIC_VECTOR(7 DOWNTO 0));
+           input : in STD_LOGIC_VECTOR(31 DOWNTO 0);
+           output : out STD_LOGIC_VECTOR(31 DOWNTO 0));
 end Reg_8b;
 
 architecture Behavioral of Reg_8b is
-signal internal_register : STD_LOGIC_VECTOR(7 DOWNTO 0):="00000000";
+signal internal_register : STD_LOGIC_VECTOR(7 DOWNTO 0):="00000000000000000000000000000000";
 begin
 
 process(clk, reset)
     begin
         if reset = '1' then
-            internal_register <= "00000000";
+            internal_register <= "00000000000000000000000000000000";
         elsif rising_edge(clk) then
         if init = '1' then
-            internal_register <= "00000000";
+            internal_register <= "000000000000000000000000000000000000";
         elsif ce = '1' then
                 if load = '1' then
                     internal_register <= input;

@@ -43,42 +43,42 @@ end Memory;
 
 architecture Behavioral of Memory is
 type memory_array is array (integer range 0 to 63) of std_logic_vector (7 downto 0);
---signal memory_data: memory_array :=(
---                                   x"08",--0
---                                   x"47",--1
---                                   x"86",--2
---                                   x"C4",--3
---                                   x"C4",--4                                 
---                                   x"00",--5
---                                   x"00",--6
---                                   x"7E",--7
---                                   x"FE",--8
---                                   others => "00000000");
-
 signal memory_data: memory_array :=(
-                                   x"11",--0
-                                   x"15",--1
-                                   x"52",--2
-                                   x"54",--3
-                                   x"C9",--4                                 
-                                   x"94",--5
-                                   x"51",--6
-                                   x"CD",--7
-                                   x"C0",--8
-                                   x"13",--9
-                                   x"52",--10
-                                   x"95",--11
-                                   x"C0",--12
-                                   x"CD",--13
-                                   x"FF",--14
-                                   x"FF",--15
-                                   x"FF",--16
-                                   x"FF",--17
-                                   x"01",--18
-                                   x"00",--19
-                                   x"28",--20
-                                   x"18",--21
+                                   x"08",--0
+                                   x"47",--1
+                                   x"86",--2
+                                   x"C4",--3
+                                   x"C4",--4                                 
+                                   x"00",--5
+                                   x"00",--6
+                                   x"7E",--7
+                                   x"FE",--8
                                    others => "00000000");
+
+--signal memory_data: memory_array :=(
+--                                   x"11",--0
+--                                   x"15",--1
+--                                   x"52",--2
+--                                   x"54",--3
+--                                   x"C9",--4                                 
+--                                   x"94",--5
+--                                   x"51",--6
+--                                   x"CD",--7
+--                                   x"C0",--8
+--                                   x"13",--9
+--                                   x"52",--10
+--                                   x"95",--11
+--                                   x"C0",--12
+--                                   x"CD",--13
+--                                   x"FF",--14
+--                                   x"FF",--15
+--                                   x"FF",--16
+--                                   x"FF",--17
+--                                   x"01",--18
+--                                   x"00",--19
+--                                   x"28",--20
+--                                   x"18",--21
+--                                   others => "00000000");
 
 begin
 

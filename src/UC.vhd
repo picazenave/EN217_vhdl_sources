@@ -38,13 +38,14 @@ entity UC is
            carry                : in STD_LOGIC;
            instruction          : in STD_LOGIC_VECTOR(7 downto 0);
            load_reg_data        : out STD_LOGIC;
-           sel_ual              : out STD_LOGIC;
+           sel_ual              : out STD_LOGIC_VECTOR (2 downto 0);
            load_accu            : out STD_LOGIC;
            load_carry           : out STD_LOGIC;
            init_carry           : out STD_LOGIC;
            r_w                  : out STD_LOGIC;
            enable_memory        : out STD_LOGIC;
-           adress               : out STD_LOGIC_VECTOR(5 downto 0));
+           adress               : out STD_LOGIC_VECTOR(5 downto 0);
+           init_accu            : out STD_LOGIC);
 end UC;
 
 architecture Behavioral of UC is
@@ -52,7 +53,7 @@ architecture Behavioral of UC is
         port (clk              : in std_logic;
               reset            : in std_logic;
               ce               : in std_logic;
-              code_op          : in std_logic_vector (1 downto 0);
+              code_op          : in std_logic_vector (3 downto 0);
               carry            : in std_logic;
               sel_mux          : out std_logic;
               load_instruction : out std_logic;
@@ -62,10 +63,11 @@ architecture Behavioral of UC is
               load_carry       : out std_logic;
               load_reg_data    : out std_logic;
               load_accu        : out std_logic;
-              sel_ual          : out std_logic;
+              sel_ual          : out std_logic_vector (2 downto 0);
               load_pc          : out std_logic;
               incr_pc          : out std_logic;
-              init_pc          : out std_logic);
+              init_pc          : out std_logic;
+              init_accu        : out std_logic);
     end component;
     
     component PC
@@ -113,7 +115,7 @@ begin
     port map (clk              => clk,
               reset            => reset,
               ce               => ce,
-              code_op          => output_registre_instruction(7 downto 6),
+              code_op          => output_registre_instruction(31 downto 28),
               carry            => carry,
               sel_mux          => sel_mux,
               load_instruction => load_instruction,
@@ -126,7 +128,8 @@ begin
               sel_ual          => sel_ual,
               load_pc          => load_pc,
               incr_pc          => incr_pc,
-              init_pc          => init_pc);
+              init_pc          => init_pc,
+              init_accu        => init_accu);
 
     PC_UC : PC
     port map (clk     => clk,

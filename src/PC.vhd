@@ -39,23 +39,23 @@ entity PC is
            init_pc : in STD_LOGIC;
            incr_pc : in STD_LOGIC;
            load_pc : in STD_LOGIC;
-           input : in STD_LOGIC_VECTOR (5 downto 0);
-           output : out STD_LOGIC_VECTOR (5 downto 0));
+           input : in STD_LOGIC_VECTOR (27 downto 0);
+           output : out STD_LOGIC_VECTOR (27 downto 0));
 end PC;
 
 architecture Behavioral of PC is
-signal output_sig : unsigned (5 downto 0);
+signal output_sig : unsigned (27 downto 0);
 begin 
 cpt_process : process(clk, reset, ce) is
     begin
         if(reset = '1') then
-            output_sig <= "000000";
+            output_sig <= "0000000000000000000000000000";
         elsif(clk'event and clk = '1') then
             if (ce = '1') then
                 if (load_pc = '1') then
                     output_sig <= unsigned(input);
                 elsif (init_pc = '1') then
-                    output_sig <= "000000";
+                    output_sig <= "0000000000000000000000000000";
                 elsif (incr_pc = '1') then
                     output_sig <= output_sig +1;
                 end if;
