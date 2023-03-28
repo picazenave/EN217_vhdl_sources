@@ -2,11 +2,11 @@ close all
 clear
 clc
 
-img=imread("bongo_cat.png");
+img=imread("bongo_small.png");
 img_bw=img>10;
 
 
-imshow(uint8(img_bw*255))
+%imshow(uint8(img_bw*255))
 figure
 imshow(img)
 axis image
@@ -15,14 +15,14 @@ axis image
 img_1d=img_bw(:,:,1);
 imshow(uint8(img_1d*255))
 
-img_edge=edge(img_1d);
-imshow(uint8(img_edge*255))
-img_edge=rot90(img_edge);
+% img_edge=edge(img_1d);
+% imshow(uint8(img_edge*255))
+img_1d=rot90(img_1d);
 % img_edge=rot90(img_edge);
 % img_edge=rot90(img_edge);
 %% find each line
 figure
-[h,w]=size(img_edge);
+[h,w]=size(img_1d);
 found=false;
 counter_line=1;
 line_vector=zeros(1000,1);
@@ -30,38 +30,27 @@ x=int32(0);
 y=int32(0);
 x2=int32(0);
 y2=int32(0);
+found=false;
 for i=1:w %each y
-    for j=1:h %each x
-
-        if(img_edge(j,i)==1)
-            if(found==false)
-                x=j;
-                y=i;
-                found=true;
-            elseif(j>x+10)
-                x2=j;
-                y2=i;
-                fprintf("found x:%d y:%d x2:%d y2:%d counter_line:%d\n",x,y,x2,y2,counter_line)
-                found=false;
-                line_vector(counter_line)=bitshift(1,43)+bitshift(1,42)+bitshift(y2,30)+bitshift(x2,20)+bitshift(y,10)+x;
-                counter_line=counter_line+1;
-                hold on
-                plot([x x2],[y y2])
-%                 plot(x,y,"--o");
-%                 hold on
-%                 plot(x2,y2,"--o");
-                %ligne trouvée
+    j=1;
+    while(j<h)%while we havent looked at alle pixels in line
+        if(img_1d(j,i)==1)
+            x=j;
+            y=i;
+            while(j<h && img_1d(j,i)==1)
+                j=j+1;
             end
-
+            x2=j;
+            y2=i;
+            fprintf("found x:%d x2:%d || y2:%d counter_line:%d\n",x,x2,y2,counter_line)
+            found=false;
+            line_vector(counter_line)=bitshift(1,43)+bitshift(1,42)+bitshift(y2,30)+bitshift(x2,20)+bitshift(y,10)+x;
+            counter_line=counter_line+1;
+            hold on
+            plot([x x2],[y y2])
         end
+        j=j+1;
     end
-
-    if(found==true)
-        %fprintf("ligne orpheline !\n")
-        %une ligne à été trouvée
-    end
-
-    found=false;
 end
 
 %% print all lines
