@@ -3,13 +3,14 @@ clear
 clc
 
 img=imread("bongo_small.png");
-img_bw=img>10;
+img_bw=img>200;
 
 
 %imshow(uint8(img_bw*255))
 figure
 imshow(img)
 axis image
+
 
 %% make 1d bw image and edge
 img_1d=img_bw(:,:,1);
