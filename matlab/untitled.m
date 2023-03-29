@@ -2,7 +2,7 @@ close all
 clear
 clc
 
-img=imread("qr.png");
+img=imread("bongo_small.png");
 img_bw=img>200;
 
 
@@ -36,8 +36,8 @@ x2=int32(0);
 y2=int32(0);
 found=false;
 % offset
-x_offset=200;
-y_offset=100;
+x_offset=0;
+y_offset=0;
 % aaaaaa
 for i=1:w %each y
     j=1;
@@ -51,8 +51,22 @@ for i=1:w %each y
             x2=j;
             y2=i;
             fprintf("found x:%d x2:%d || y2:%d counter_line:%d\n",x,x2,y2,counter_line)
+
+            %encode
             found=false;
             line_vector(counter_line)=bitshift(1,43)+bitshift(1,42)+bitshift(y2+y_offset,30)+bitshift(x2+x_offset,20)+bitshift(y+y_offset,10)+x+x_offset;
+            
+
+            % decode
+            decoded_x=bitand(line_vector(counter_line),uint64(0x3FF))-x_offset;
+            decoded_y=bitand(bitshift(line_vector(counter_line),-10),uint64(0x3FF))-y_offset;
+            decoded_x2=bitand(bitshift(line_vector(counter_line),-20),uint64(0x3FF))-x_offset;
+            decoded_y2=bitand(bitshift(line_vector(counter_line),-30),uint64(0x3FF))-y_offset;
+            if(decoded_x~=x)||(decoded_x2~=x2)||(decoded_y~=y)||(decoded_y2~=y)
+                fprintf("NOT THE SAME AS ENCODED\n x:%d x2:%d || y2:%d \n======================\n",decoded_x,decoded_x2,decoded_y2)
+            end
+
+            %raz
             counter_line=counter_line+1;
             hold on
             plot([x+x_offset x2+x_offset],[y+y_offset y2+y_offset])
@@ -73,15 +87,15 @@ fileID = fopen('data.txt','w');
 fprintf(fileID,"x""%012lx"",\n",nonzeros(line_vector));
 fclose(fileID);
 %plot(line_vector)
-%%
+%% encode phrase
 phrase="cberthelot t bo";
 x=200;
 y=250;
 resultat_vector=zeros(100,1);
 lettres=double(char(phrase));
 for i=1:strlength(phrase)
-lettre=lettres(i);
-resultat_vector(i)=bitshift(1,38+6)+bitshift(char2glyph(lettre),20)+bitshift(y,10)+(x+i*6);
+    lettre=lettres(i);
+    resultat_vector(i)=bitshift(1,38+6)+bitshift(char2glyph(lettre),20)+bitshift(y,10)+(x+i*6);
 end
 fileID = fopen('data_text.txt','w');
 fprintf(fileID,"x""%012lx"",\n",nonzeros(resultat_vector));
