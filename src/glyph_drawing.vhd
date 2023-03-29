@@ -45,16 +45,17 @@ END glyph_drawing;
 
 ARCHITECTURE Behavioral OF glyph_drawing IS
     -- ATTRIBUTE mark_debug : STRING;
-    COMPONENT PC
+    COMPONENT Nbit_counter
+        GENERIC (WIDTH : NATURAL);
         PORT (
             clk : IN STD_LOGIC;
             reset : IN STD_LOGIC;
             ce : IN STD_LOGIC;
-            init_pc : IN STD_LOGIC;
-            incr_pc : IN STD_LOGIC;
-            load_pc : IN STD_LOGIC;
-            input_pc : IN STD_LOGIC_VECTOR (5 DOWNTO 0);
-            output_pc : OUT STD_LOGIC_VECTOR (5 DOWNTO 0));
+            init : IN STD_LOGIC;
+            incr : IN STD_LOGIC;
+            load : IN STD_LOGIC;
+            input : IN STD_LOGIC_VECTOR (WIDTH - 1 DOWNTO 0);
+            output : OUT STD_LOGIC_VECTOR (WIDTH - 1 DOWNTO 0));
     END COMPONENT;
     COMPONENT glyph_counter IS
         PORT (
@@ -67,16 +68,6 @@ ARCHITECTURE Behavioral OF glyph_drawing IS
             load : IN STD_LOGIC;
             input_counter : IN STD_LOGIC_VECTOR(18 DOWNTO 0);
             output_counter : OUT STD_LOGIC_VECTOR(18 DOWNTO 0));
-    END COMPONENT;
-    COMPONENT Reg_19b IS
-        PORT (
-            reset : IN STD_LOGIC;
-            clk : IN STD_LOGIC;
-            ce : IN STD_LOGIC;
-            load : IN STD_LOGIC;
-            init : IN STD_LOGIC;
-            input : IN STD_LOGIC_VECTOR(18 DOWNTO 0);
-            output : OUT STD_LOGIC_VECTOR(18 DOWNTO 0));
     END COMPONENT;
     --=======================================================
 
@@ -112,27 +103,33 @@ ARCHITECTURE Behavioral OF glyph_drawing IS
     -- ATTRIBUTE mark_debug OF ready : SIGNAL IS "true";
 BEGIN
 
-    counter_position : PC
+    counter_position : Nbit_counter
+    GENERIC MAP(
+        WIDTH => 6
+    )
     PORT MAP(
         clk => clk,
         reset => reset,
         ce => ce,
-        init_pc => init_counter_position,
-        incr_pc => incr_counter_position,
-        load_pc => '0',
-        input_pc => "000000",
-        output_pc => output_counter_position);
+        init => init_counter_position,
+        incr => incr_counter_position,
+        load => '0',
+        input => (OTHERS => '0'),
+        output => output_counter_position);
 
-    counter_line : PC
+    counter_line : Nbit_counter
+    GENERIC MAP(
+        WIDTH => 6
+    )
     PORT MAP(
         clk => clk,
         reset => reset,
         ce => ce,
-        init_pc => init_counter_line,
-        incr_pc => incr_counter_line,
-        load_pc => '0',
-        input_pc => "000000",
-        output_pc => output_counter_line);
+        init => init_counter_line,
+        incr => incr_counter_line,
+        load => '0',
+        input => (OTHERS => '0'),
+        output => output_counter_line);
 
     counter_address : glyph_counter
     PORT MAP(
@@ -145,18 +142,6 @@ BEGIN
         load => load_counter_address,
         input_counter => address_counter_input,
         output_counter => address_out);
-
-    -- reg_ Reg_19b
-    --     PORT MAP(
-    --         reset : IN STD_LOGIC;
-    --         clk : IN STD_LOGIC;
-    --         ce : IN STD_LOGIC;
-    --         load : IN STD_LOGIC;
-    --         init : IN STD_LOGIC;
-    --         input : IN STD_LOGIC_VECTOR(18 DOWNTO 0);
-    --         output : OUT STD_LOGIC_VECTOR(18 DOWNTO 0));
-    -- END COMPONENT;
-    --===================================
 
     maj_etat : PROCESS (clk, reset) IS
     BEGIN

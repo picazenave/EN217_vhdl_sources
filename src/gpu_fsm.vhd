@@ -62,7 +62,6 @@ ARCHITECTURE Behavioral OF FSM_GPU IS
 
     SIGNAL pr_state, nx_state : Etat;
 
-    SIGNAL load_pc : STD_LOGIC;
     SIGNAL incr_pc : STD_LOGIC;
     SIGNAL init_pc : STD_LOGIC;
     SIGNAL output_pc : STD_LOGIC_VECTOR(11 DOWNTO 0);
