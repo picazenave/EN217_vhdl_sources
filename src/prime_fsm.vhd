@@ -31,66 +31,48 @@ USE IEEE.NUMERIC_STD.ALL;
 
 ENTITY prime_fsm IS
     PORT (
-        clk : IN STD_LOGIC;
-        reset : IN STD_LOGIC;
-        ce : IN STD_LOGIC;
-        data_in : IN STD_LOGIC_VECTOR(47 DOWNTO 0);
-        ready_drawing_entity : IN STD_LOGIC;
-        enable_drawing : OUT STD_LOGIC;
-        address : OUT STD_LOGIC_VECTOR(11 DOWNTO 0));
+        CLK                     : IN STD_LOGIC;
+        RESET                   : IN STD_LOGIC;
+        CE                      : IN STD_LOGIC;
+        DATA_PRIME              : IN STD_LOGIC_VECTOR(27 DOWNTO 0);
+        OUTPUT_CPT_ADR_PRIME    : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+        OUTPUT_CPT_BOUCLE       : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+
+        INIT_CPT_ADR_GRAPH      : OUT STD_LOGIC;
+        INIT_CPT_PRIME          : OUT STD_LOGIC;
+        INIT_CPT_BOUCLE         : OUT STD_LOGIC;
+
+        INCR_CPT_ADR_GRAPH      : OUT STD_LOGIC;
+        INCR_CPT_PRIME          : OUT STD_LOGIC;
+        INCR_CPT_BOUCLE         : OUT STD_LOGIC;
+
+        LOAD_CPT_ADR_GRAPH      : OUT STD_LOGIC;
+        LOAD_CPT_PRIME          : OUT STD_LOGIC;
+        LOAD_CPT_BOUCLE         : OUT STD_LOGIC;
+
+        r_w_graphic             : OUT STD_LOGIC);
 END prime_fsm;
 
 ARCHITECTURE Behavioral OF prime_fsm IS
-    -- ATTRIBUTE mark_debug : STRING;
-    COMPONENT Nbit_counter
-        GENERIC (WIDTH : NATURAL);
-        PORT (
-            clk : IN STD_LOGIC;
-            reset : IN STD_LOGIC;
-            ce : IN STD_LOGIC;
-            init : IN STD_LOGIC;
-            incr : IN STD_LOGIC;
-            load : IN STD_LOGIC;
-            input : IN STD_LOGIC_VECTOR (WIDTH - 1 DOWNTO 0);
-            output : OUT STD_LOGIC_VECTOR (WIDTH - 1 DOWNTO 0));
-    END COMPONENT;
-    TYPE etat IS(init,
-    fetch_data_graphic,
-    display_graphic,
-    loop_graphic,
-    end_state);
+    TYPE etat IS(
+        init,
+        fetch_data_prime,
+        loop_state,
+        copy_graphic,
+        loop_graphic,
+        raz_incr,
+        end_state);
 
     SIGNAL pr_state, nx_state : Etat;
-
-    SIGNAL load_pc : STD_LOGIC;
-    SIGNAL incr_pc : STD_LOGIC;
-    SIGNAL init_pc : STD_LOGIC;
-    SIGNAL output_pc : STD_LOGIC_VECTOR(11 DOWNTO 0);
-
-    -- ATTRIBUTE mark_debug OF pr_state : SIGNAL IS "true";
-    -- ATTRIBUTE mark_debug OF address : SIGNAL IS "true";
+    SIGNAL adress : std_logic_vector(31 downto 0);
 BEGIN
 
-    address_counter : Nbit_counter
-    GENERIC MAP(
-        WIDTH => 12
-    )
-    PORT MAP(
-        clk => clk,
-        reset => reset,
-        ce => ce,
-        init => init_pc,
-        incr => incr_pc,
-        load => '0',
-        input => (OTHERS => '0'),
-        output => output_pc);
-
-    maj_etat : PROCESS (clk, reset) IS
+    maj_etat : PROCESS (CLK, RESET) IS
     BEGIN
-        IF (reset = '1') THEN
+        IF (RESET = '1') THEN
             pr_state <= init;
-        ELSIF (clk'event AND clk = '1') THEN
-            IF (ce = '1') THEN
+        ELSIF (CLK'event AND CLK = '1') THEN
+            IF (CE = '1') THEN
                 pr_state <= nx_state;
             END IF;
         END IF;
@@ -100,39 +82,35 @@ BEGIN
     --===============================================================================
 
     ----------------------------------------------------------------------------------
-    calc_new_state : PROCESS (data_in, pr_state, ready_drawing_entity) IS
+    calc_new_state : PROCESS (pr_state, DATA_PRIME, OUTPUT_CPT_BOUCLE, adress) IS
     BEGIN
         CASE pr_state IS
-            WHEN init => nx_state <= fetch_data_graphic;
+            WHEN init => nx_state <= fetch_data_prime;
                 ----------------------------------------------------------------------------------
-            WHEN fetch_data_graphic =>
-                IF (data_in = x"000000000000") THEN
+            WHEN fetch_data_prime => nx_state <= loop_state;
+                ----------------------------------------------------------------------------------
+            WHEN loop_state => 
+                IF (DATA_PRIME = "00000000000000000000000000") then
+                    nx_state <= fetch_data_prime;
+                ELSE IF (adress = x"000000FF") then
                     nx_state <= end_state;
                 ELSE
-                    nx_state <= display_graphic;
+                    nx_state <= copy_graphic;
                 END IF;
                 ----------------------------------------------------------------------------------
-            WHEN display_graphic =>
-                IF (ready_drawing_entity = '1') THEN
-                    nx_state <= loop_graphic;
-                ELSE
-                    nx_state <= display_graphic;
-                END IF;
+            WHEN copy_graphic => nx_state <= loop_graphic
+                ----------------------------------------------------------------------------------
             WHEN loop_graphic =>
-                IF (data_in = x"000000000000") THEN
-                    nx_state <= end_state;
-                ELSE
-                    nx_state <= fetch_data_graphic;
-                END IF;
-
-            WHEN end_state =>
-                IF (data_in = x"000000000000") THEN
-                    nx_state <= end_state;
-                ELSE
-                    nx_state <= fetch_data_graphic;
-                END IF;
+                IF (OUTPUT_CPT_BOUCLE < 3) then
+                    nx_state <= copy_graphic;
+                else
+                    nx_state <= raz_incr;
                 ----------------------------------------------------------------------------------
-                --WHEN exec_IFSup => nx_state <= fetch_instruction;
+            WHEN raz_incr =>
+                    nx_state <= fetch_data_prime;
+                ----------------------------------------------------------------------------------
+            WHEN end_state => 
+                    nx_state <= end_state;
         END CASE;
 
     END PROCESS calc_new_state;
@@ -145,35 +123,97 @@ BEGIN
     BEGIN
         CASE pr_state IS
             WHEN init =>
-                --address <= (OTHERS => '0');
-                enable_drawing <= '0';
-                --counter_address_graphic <= (OTHERS => '0');
-                init_pc <= '1';
-                incr_pc <= '0';
+            INIT_CPT_ADR_GRAPH      <= '0';
+            INIT_CPT_PRIME          <= '0';
+            INIT_CPT_BOUCLE         <= '1';
 
-            WHEN fetch_data_graphic => -- 1 for graphic data
-                --address <= STD_LOGIC_VECTOR(counter_address_graphic);
-                enable_drawing <= '0';
-                incr_pc <= '0';
-                init_pc <= '0';
+            INCR_CPT_ADR_GRAPH      <= '0';
+            INCR_CPT_PRIME          <= '0';
+            INCR_CPT_BOUCLE         <= '0'
 
-            WHEN display_graphic =>
-                enable_drawing <= '1';
-                incr_pc <= '0';
-                init_pc <= '0';
+            LOAD_CPT_ADR_GRAPH      <= '1';
+            LOAD_CPT_PRIME          <= '1';
+            LOAD_CPT_BOUCLE         <= '0';
+            
+            r_w_graphic             <= '0';
+                ----------------------------------------------------------------------------------
+            WHEN fetch_data_prime => 
+            INIT_CPT_ADR_GRAPH      <= '0';
+            INIT_CPT_PRIME          <= '0';
+            INIT_CPT_BOUCLE         <= '0';
 
+            INCR_CPT_ADR_GRAPH      <= '0';
+            INCR_CPT_PRIME          <= '0';
+            INCR_CPT_BOUCLE         <= '0'
+
+            LOAD_CPT_ADR_GRAPH      <= '0';
+            LOAD_CPT_PRIME          <= '0';
+            LOAD_CPT_BOUCLE         <= '0';
+            
+            r_w_graphic             <= '0';
+                ----------------------------------------------------------------------------------
+            WHEN loop_state =>
+            INIT_CPT_ADR_GRAPH      <= '0';
+            INIT_CPT_PRIME          <= '0';
+            INIT_CPT_BOUCLE         <= '0';
+
+            INCR_CPT_ADR_GRAPH      <= '0';
+            INCR_CPT_PRIME          <= '0';
+            INCR_CPT_BOUCLE         <= '0'
+
+            LOAD_CPT_ADR_GRAPH      <= '0';
+            LOAD_CPT_PRIME          <= '0';
+            LOAD_CPT_BOUCLE         <= '0';
+            
+            r_w_graphic             <= '0';
+                ----------------------------------------------------------------------------------
+            WHEN copy_graphic =>
+            INIT_CPT_ADR_GRAPH      <= '0';
+            INIT_CPT_PRIME          <= '0';
+            INIT_CPT_BOUCLE         <= '0';
+
+            INCR_CPT_ADR_GRAPH      <= '0';
+            INCR_CPT_PRIME          <= '0';
+            INCR_CPT_BOUCLE         <= '0'
+
+            LOAD_CPT_ADR_GRAPH      <= '0';
+            LOAD_CPT_PRIME          <= '0';
+            LOAD_CPT_BOUCLE         <= '0';
+            
+            r_w_graphic             <= '1';
+                ----------------------------------------------------------------------------------
             WHEN loop_graphic =>
-                enable_drawing <= '0';
-                incr_pc <= '1';
-                init_pc <= '0';
-                --counter_address_graphic <= counter_address_graphic + 1;
+            INIT_CPT_ADR_GRAPH      <= '0';
+            INIT_CPT_PRIME          <= '0';
+            INIT_CPT_BOUCLE         <= '0';
 
+            INCR_CPT_ADR_GRAPH      <= '0';
+            INCR_CPT_PRIME          <= '0';
+            INCR_CPT_BOUCLE         <= '1'
+
+            LOAD_CPT_ADR_GRAPH      <= '0';
+            LOAD_CPT_PRIME          <= '0';
+            LOAD_CPT_BOUCLE         <= '0';
+            
+            r_w_graphic             <= '0';
+                ----------------------------------------------------------------------------------
+            WHEN raz_incr =>
+            INIT_CPT_ADR_GRAPH      <= '0';
+            INIT_CPT_PRIME          <= '0';
+            INIT_CPT_BOUCLE         <= '1';
+
+            INCR_CPT_ADR_GRAPH      <= '1';
+            INCR_CPT_PRIME          <= '1';
+            INCR_CPT_BOUCLE         <= '0'
+
+            LOAD_CPT_ADR_GRAPH      <= '0';
+            LOAD_CPT_PRIME          <= '0';
+            LOAD_CPT_BOUCLE         <= '1';
+            
+            r_w_graphic             <= '0';
+                ----------------------------------------------------------------------------------
             WHEN end_state =>
-                --address <= (OTHERS => '0');
-                enable_drawing <= '0';
-                --counter_address_graphic <= (OTHERS => '0');
-                incr_pc <= '0';
-                init_pc <= '0';
+                ----------------------------------------------------------------------------------
         END CASE;
     END PROCESS calc_output;
 
