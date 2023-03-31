@@ -45,8 +45,8 @@ ENTITY top_level_fsm_gpu IS
 END top_level_fsm_gpu;
 
 ARCHITECTURE Behavioral OF top_level_fsm_gpu IS
--- attribute mark_debug : string;
---=========================================================
+    -- attribute mark_debug : string;
+    --=========================================================
     TYPE etat IS(mode_graphic,
     mode_text);
     --=========================================================
@@ -116,7 +116,11 @@ ARCHITECTURE Behavioral OF top_level_fsm_gpu IS
         PORT (
             clk : IN STD_LOGIC;
             ce : IN STD_LOGIC;
+            rw : IN STD_LOGIC;--R/=0 W=1
+            address_read_only : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
             address : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
+            input : in STD_LOGIC_VECTOR(47 DOWNTO 0);
+            data_out_read_only : OUT STD_LOGIC_VECTOR(47 DOWNTO 0);
             data_out : OUT STD_LOGIC_VECTOR(47 DOWNTO 0));
     END COMPONENT;
     --=========================================================
@@ -135,8 +139,8 @@ ARCHITECTURE Behavioral OF top_level_fsm_gpu IS
     SIGNAL sig_ready_drawing_entity : STD_LOGIC;
     SIGNAL sig_enable_drawing : STD_LOGIC;
 
-    SIGNAL sig_address_to_memory :  STD_LOGIC_VECTOR(11 DOWNTO 0);
-    SIGNAL sig_data_from_memory :  STD_LOGIC_VECTOR(47 DOWNTO 0);
+    SIGNAL sig_address_to_memory : STD_LOGIC_VECTOR(11 DOWNTO 0);
+    SIGNAL sig_data_from_memory : STD_LOGIC_VECTOR(47 DOWNTO 0);
 
     -- attribute mark_debug of sig_ready_drawing_entity : signal is "true";
     -- attribute mark_debug of sig_enable_drawing : signal is "true";
@@ -148,8 +152,12 @@ BEGIN
     PORT MAP(
         clk => sig_clk,
         ce => sig_ce,
-        address => sig_address_to_memory,
-        data_out => sig_data_from_memory);
+        rw => '0',--R/=0 W=1
+        input => x"000000000000",
+        address_read_only => sig_address_to_memory,
+        address => x"000",
+        data_out_read_only => sig_data_from_memory,
+        data_out => OPEN);
     --=========================================================  
     fsm : FSM_GPU
     PORT MAP(

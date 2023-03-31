@@ -221,7 +221,7 @@ signal memory_data: memory_array :=(
     x"00000037",--18 Adr = adr + 1
     x"80000032",--19 IFsup si adr + 1 > max_adr => carry 1
     x"10000016",--20 JCC CONTINUER
-    x"10000015",--21 JCC sur moi même
+    x"10000015",--21 JCC sur moi mï¿½me
     x"50000000",--22 CLA --CONTINUER
     x"30000034",--23 Add nb
     x"30000036",--24 Add 1
