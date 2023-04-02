@@ -3,162 +3,188 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="cfg_tb_top_level_fsm_gpu_behav.wdb" id="1">
+      <db_ref path="cfg_tb_prime_converter_behav.wdb" id="1">
          <top_modules>
-            <top_module name="tb_top_level_fsm_gpu" />
+            <top_module name="tb_prime_converter" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="2,001.000001 us"></ZoomEndTime>
-      <Cursor1Time time="1,501.000000 us"></Cursor1Time>
+      <ZoomEndTime time="2.681175 us"></ZoomEndTime>
+      <Cursor1Time time="1.318610 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="156"></NameColumnWidth>
-      <ValueColumnWidth column_width="97"></ValueColumnWidth>
+      <ValueColumnWidth column_width="81"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="4" />
-   <wvobject fp_name="/tb_top_level_fsm_gpu/reset" type="logic">
-      <obj_property name="ElementShortName">reset</obj_property>
-      <obj_property name="ObjectShortName">reset</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_top_level_fsm_gpu/clk100M" type="logic">
-      <obj_property name="ElementShortName">clk100M</obj_property>
-      <obj_property name="ObjectShortName">clk100M</obj_property>
-   </wvobject>
+   <WVObjectSize size="19" />
    <wvobject fp_name="group25" type="group">
       <obj_property name="label">FSM</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/fsm/data_in" type="array">
-         <obj_property name="ElementShortName">data_in[47:0]</obj_property>
-         <obj_property name="ObjectShortName">data_in[47:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/fsm/ready_drawing_entity" type="logic">
-         <obj_property name="ElementShortName">ready_drawing_entity</obj_property>
-         <obj_property name="ObjectShortName">ready_drawing_entity</obj_property>
-      </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/fsm/enable_drawing" type="logic">
-         <obj_property name="ElementShortName">enable_drawing</obj_property>
-         <obj_property name="ObjectShortName">enable_drawing</obj_property>
-      </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/fsm/address" type="array">
-         <obj_property name="ElementShortName">address[11:0]</obj_property>
-         <obj_property name="ObjectShortName">address[11:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/fsm/pr_state" type="other">
-         <obj_property name="ElementShortName">pr_state</obj_property>
-         <obj_property name="ObjectShortName">pr_state</obj_property>
-      </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/fsm/nx_state" type="other">
-         <obj_property name="ElementShortName">nx_state</obj_property>
-         <obj_property name="ObjectShortName">nx_state</obj_property>
-      </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/fsm/incr_pc" type="logic">
-         <obj_property name="ElementShortName">incr_pc</obj_property>
-         <obj_property name="ObjectShortName">incr_pc</obj_property>
-      </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/fsm/init_pc" type="logic">
-         <obj_property name="ElementShortName">init_pc</obj_property>
-         <obj_property name="ObjectShortName">init_pc</obj_property>
-      </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/fsm/output_pc" type="array">
-         <obj_property name="ElementShortName">output_pc[11:0]</obj_property>
-         <obj_property name="ObjectShortName">output_pc[11:0]</obj_property>
-      </wvobject>
    </wvobject>
    <wvobject fp_name="group48" type="group">
       <obj_property name="label">drawer</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/enable" type="logic">
-         <obj_property name="ElementShortName">enable</obj_property>
-         <obj_property name="ObjectShortName">enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/ce" type="logic">
+      <obj_property name="ElementShortName">ce</obj_property>
+      <obj_property name="ObjectShortName">ce</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/dut/fsm/pr_state" type="other">
+      <obj_property name="ElementShortName">pr_state</obj_property>
+      <obj_property name="ObjectShortName">pr_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/address_graphic" type="array">
+      <obj_property name="ElementShortName">address_graphic[11:0]</obj_property>
+      <obj_property name="ObjectShortName">address_graphic[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/address_prime" type="array">
+      <obj_property name="ElementShortName">address_prime[7:0]</obj_property>
+      <obj_property name="ObjectShortName">address_prime[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/r_w_graphic" type="logic">
+      <obj_property name="ElementShortName">r_w_graphic</obj_property>
+      <obj_property name="ObjectShortName">r_w_graphic</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/data_graphic" type="array">
+      <obj_property name="ElementShortName">data_graphic[47:0]</obj_property>
+      <obj_property name="ObjectShortName">data_graphic[47:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/TbClock" type="logic">
+      <obj_property name="ElementShortName">TbClock</obj_property>
+      <obj_property name="ObjectShortName">TbClock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/TbSimEnded" type="logic">
+      <obj_property name="ElementShortName">TbSimEnded</obj_property>
+      <obj_property name="ObjectShortName">TbSimEnded</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/TbPeriod" type="other">
+      <obj_property name="ElementShortName">TbPeriod</obj_property>
+      <obj_property name="ObjectShortName">TbPeriod</obj_property>
+   </wvobject>
+   <wvobject fp_name="group51" type="group">
+      <obj_property name="label">cnt y</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_y_graphic/init" type="logic">
+         <obj_property name="ElementShortName">init</obj_property>
+         <obj_property name="ObjectShortName">init</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/reset" type="logic">
-         <obj_property name="ElementShortName">reset</obj_property>
-         <obj_property name="ObjectShortName">reset</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_y_graphic/incr" type="logic">
+         <obj_property name="ElementShortName">incr</obj_property>
+         <obj_property name="ObjectShortName">incr</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/mode" type="logic">
-         <obj_property name="ElementShortName">mode</obj_property>
-         <obj_property name="ObjectShortName">mode</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_y_graphic/load" type="logic">
+         <obj_property name="ElementShortName">load</obj_property>
+         <obj_property name="ObjectShortName">load</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/x" type="array">
-         <obj_property name="ElementShortName">x[9:0]</obj_property>
-         <obj_property name="ObjectShortName">x[9:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_y_graphic/input" type="array">
+         <obj_property name="ElementShortName">input[9:0]</obj_property>
+         <obj_property name="ObjectShortName">input[9:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/y" type="array">
-         <obj_property name="ElementShortName">y[9:0]</obj_property>
-         <obj_property name="ObjectShortName">y[9:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_y_graphic/output" type="array">
+         <obj_property name="ElementShortName">output[9:0]</obj_property>
+         <obj_property name="ObjectShortName">output[9:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/x2" type="array">
-         <obj_property name="ElementShortName">x2[9:0]</obj_property>
-         <obj_property name="ObjectShortName">x2[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group57" type="group">
+      <obj_property name="label">cnt boucle</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_boucle/init" type="logic">
+         <obj_property name="ElementShortName">init</obj_property>
+         <obj_property name="ObjectShortName">init</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/y2" type="array">
-         <obj_property name="ElementShortName">y2[9:0]</obj_property>
-         <obj_property name="ObjectShortName">y2[9:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_boucle/incr" type="logic">
+         <obj_property name="ElementShortName">incr</obj_property>
+         <obj_property name="ObjectShortName">incr</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/address_out" type="array">
-         <obj_property name="ElementShortName">address_out[18:0]</obj_property>
-         <obj_property name="ObjectShortName">address_out[18:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_boucle/load" type="logic">
+         <obj_property name="ElementShortName">load</obj_property>
+         <obj_property name="ObjectShortName">load</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/data_out" type="array">
-         <obj_property name="ElementShortName">data_out[0:0]</obj_property>
-         <obj_property name="ObjectShortName">data_out[0:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_boucle/input" type="array">
+         <obj_property name="ElementShortName">input[2:0]</obj_property>
+         <obj_property name="ObjectShortName">input[2:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/ready" type="logic">
-         <obj_property name="ElementShortName">ready</obj_property>
-         <obj_property name="ObjectShortName">ready</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_boucle/output" type="array">
+         <obj_property name="ElementShortName">output[2:0]</obj_property>
+         <obj_property name="ObjectShortName">output[2:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/sig_glyph_index" type="array">
-         <obj_property name="ElementShortName">sig_glyph_index[5:0]</obj_property>
-         <obj_property name="ObjectShortName">sig_glyph_index[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group63" type="group">
+      <obj_property name="label">cnt prime</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_address_prime/init" type="logic">
+         <obj_property name="ElementShortName">init</obj_property>
+         <obj_property name="ObjectShortName">init</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/sig_glyph_data" type="array">
-         <obj_property name="ElementShortName">sig_glyph_data[39:0]</obj_property>
-         <obj_property name="ObjectShortName">sig_glyph_data[39:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_address_prime/incr" type="logic">
+         <obj_property name="ElementShortName">incr</obj_property>
+         <obj_property name="ObjectShortName">incr</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/sig_address_vga" type="array">
-         <obj_property name="ElementShortName">sig_address_vga[18:0]</obj_property>
-         <obj_property name="ObjectShortName">sig_address_vga[18:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_address_prime/load" type="logic">
+         <obj_property name="ElementShortName">load</obj_property>
+         <obj_property name="ObjectShortName">load</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/sig_data_vga" type="array">
-         <obj_property name="ElementShortName">sig_data_vga[0:0]</obj_property>
-         <obj_property name="ObjectShortName">sig_data_vga[0:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_address_prime/input" type="array">
+         <obj_property name="ElementShortName">input[7:0]</obj_property>
+         <obj_property name="ObjectShortName">input[7:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/sig_address_out_glyph" type="array">
-         <obj_property name="ElementShortName">sig_address_out_glyph[18:0]</obj_property>
-         <obj_property name="ObjectShortName">sig_address_out_glyph[18:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_address_prime/output" type="array">
+         <obj_property name="ElementShortName">output[7:0]</obj_property>
+         <obj_property name="ObjectShortName">output[7:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/sig_data_out_glyph" type="array">
-         <obj_property name="ElementShortName">sig_data_out_glyph[0:0]</obj_property>
-         <obj_property name="ObjectShortName">sig_data_out_glyph[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="group69" type="group">
+      <obj_property name="label">cnt graphic</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_address_graphic/init" type="logic">
+         <obj_property name="ElementShortName">init</obj_property>
+         <obj_property name="ObjectShortName">init</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/sig_address_out_primitive" type="array">
-         <obj_property name="ElementShortName">sig_address_out_primitive[18:0]</obj_property>
-         <obj_property name="ObjectShortName">sig_address_out_primitive[18:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_address_graphic/incr" type="logic">
+         <obj_property name="ElementShortName">incr</obj_property>
+         <obj_property name="ObjectShortName">incr</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/sig_data_out_primitive" type="array">
-         <obj_property name="ElementShortName">sig_data_out_primitive[0:0]</obj_property>
-         <obj_property name="ObjectShortName">sig_data_out_primitive[0:0]</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_address_graphic/load" type="logic">
+         <obj_property name="ElementShortName">load</obj_property>
+         <obj_property name="ObjectShortName">load</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/ready_glyph" type="logic">
-         <obj_property name="ElementShortName">ready_glyph</obj_property>
-         <obj_property name="ObjectShortName">ready_glyph</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_address_graphic/input" type="array">
+         <obj_property name="ElementShortName">input[11:0]</obj_property>
+         <obj_property name="ObjectShortName">input[11:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/ready_primitive" type="logic">
-         <obj_property name="ElementShortName">ready_primitive</obj_property>
-         <obj_property name="ObjectShortName">ready_primitive</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/counter_address_graphic/output" type="array">
+         <obj_property name="ElementShortName">output[11:0]</obj_property>
+         <obj_property name="ObjectShortName">output[11:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/enable_glyph" type="logic">
-         <obj_property name="ElementShortName">enable_glyph</obj_property>
-         <obj_property name="ObjectShortName">enable_glyph</obj_property>
+   </wvobject>
+   <wvobject fp_name="group72" type="group">
+      <obj_property name="label">conv_chiffre</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/conv_chiffre/number_in" type="array">
+         <obj_property name="ElementShortName">number_in[31:0]</obj_property>
+         <obj_property name="ObjectShortName">number_in[31:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_top_level_fsm_gpu/dut/drawer/enable_primitive" type="logic">
-         <obj_property name="ElementShortName">enable_primitive</obj_property>
-         <obj_property name="ObjectShortName">enable_primitive</obj_property>
+      <wvobject fp_name="/tb_prime_converter/dut/conv_chiffre/digit_out" type="array">
+         <obj_property name="ElementShortName">digit_out[15:0]</obj_property>
+         <obj_property name="ObjectShortName">digit_out[15:0]</obj_property>
       </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/dut/digit_to_display" type="array">
+      <obj_property name="ElementShortName">digit_to_display[3:0]</obj_property>
+      <obj_property name="ObjectShortName">digit_to_display[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_prime_converter/dut/output_counter_boucle" type="array">
+      <obj_property name="ElementShortName">output_counter_boucle[2:0]</obj_property>
+      <obj_property name="ObjectShortName">output_counter_boucle[2:0]</obj_property>
    </wvobject>
 </wave_config>

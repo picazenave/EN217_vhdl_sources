@@ -35,7 +35,7 @@ ENTITY prime_fsm IS
         RESET : IN STD_LOGIC;
         CE : IN STD_LOGIC;
         DATA_PRIME : IN STD_LOGIC_VECTOR(27 DOWNTO 0);
-        OUTPUT_CPT_ADR_PRIME : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
+        OUTPUT_CPT_ADR_PRIME : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
         OUTPUT_CPT_BOUCLE : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
 
         INIT_CPT_ADR_GRAPH : OUT STD_LOGIC;
@@ -64,7 +64,6 @@ ARCHITECTURE Behavioral OF prime_fsm IS
     end_state);
 
     SIGNAL pr_state, nx_state : Etat;
-    SIGNAL adress : STD_LOGIC_VECTOR(31 DOWNTO 0);
 BEGIN
 
     maj_etat : PROCESS (CLK, RESET) IS
@@ -82,7 +81,7 @@ BEGIN
     --===============================================================================
 
     ----------------------------------------------------------------------------------
-    calc_new_state : PROCESS (pr_state, DATA_PRIME, OUTPUT_CPT_BOUCLE, adress) IS
+    calc_new_state : PROCESS (pr_state, DATA_PRIME, OUTPUT_CPT_BOUCLE, OUTPUT_CPT_ADR_PRIME) IS
     BEGIN
         CASE pr_state IS
             WHEN init => nx_state <= fetch_data_prime;
@@ -90,9 +89,9 @@ BEGIN
             WHEN fetch_data_prime => nx_state <= loop_state;
                 ----------------------------------------------------------------------------------
             WHEN loop_state =>
-                IF (DATA_PRIME = "00000000000000000000000000") THEN
+                IF (DATA_PRIME = "0000000000000000000000000000") THEN
                     nx_state <= fetch_data_prime;
-                ELSIF (adress = x"000000FF") THEN
+                ELSIF (OUTPUT_CPT_ADR_PRIME = x"0A") THEN--TODO
                     nx_state <= end_state;
                 ELSE
                     nx_state <= copy_graphic;
@@ -188,7 +187,7 @@ BEGIN
                 INIT_CPT_PRIME <= '0';
                 INIT_CPT_BOUCLE <= '0';
 
-                INCR_CPT_ADR_GRAPH <= '0';
+                INCR_CPT_ADR_GRAPH <= '1';
                 INCR_CPT_PRIME <= '0';
                 INCR_CPT_BOUCLE <= '1';
 
@@ -209,11 +208,24 @@ BEGIN
 
                 LOAD_CPT_ADR_GRAPH <= '0';
                 LOAD_CPT_PRIME <= '0';
-                LOAD_CPT_BOUCLE <= '1';
+                LOAD_CPT_BOUCLE <= '0';
 
                 r_w_graphic <= '0';
                 ----------------------------------------------------------------------------------
             WHEN end_state =>
+                INIT_CPT_ADR_GRAPH <= '0';
+                INIT_CPT_PRIME <= '0';
+                INIT_CPT_BOUCLE <= '0';
+
+                INCR_CPT_ADR_GRAPH <= '1';
+                INCR_CPT_PRIME <= '0';
+                INCR_CPT_BOUCLE <= '0';
+
+                LOAD_CPT_ADR_GRAPH <= '0';
+                LOAD_CPT_PRIME <= '0';
+                LOAD_CPT_BOUCLE <= '0';
+
+                r_w_graphic <= '0';
                 ----------------------------------------------------------------------------------
         END CASE;
     END PROCESS calc_output;

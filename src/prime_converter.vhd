@@ -34,9 +34,9 @@ ENTITY prime_converter IS
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
         ce : IN STD_LOGIC;
-        prime_data_in : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        prime_data_in : IN STD_LOGIC_VECTOR(27 DOWNTO 0);
         address_graphic : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
-        address_prime : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+        address_prime : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
         r_w_graphic : OUT STD_LOGIC;
         data_graphic : OUT STD_LOGIC_VECTOR(47 DOWNTO 0));
 END prime_converter;
@@ -55,13 +55,27 @@ ARCHITECTURE Behavioral OF prime_converter IS
             output : OUT STD_LOGIC_VECTOR (WIDTH - 1 DOWNTO 0));
     END COMPONENT;
     --===========================================================
+    COMPONENT Nbit_Nplus_counter
+    GENERIC (WIDTH : NATURAL;
+            PLUS : NATURAL);
+        PORT (
+            clk : IN STD_LOGIC;
+            reset : IN STD_LOGIC;
+            ce : IN STD_LOGIC;
+            init : IN STD_LOGIC;
+            incr : IN STD_LOGIC;
+            load : IN STD_LOGIC;
+            input : IN STD_LOGIC_VECTOR (WIDTH - 1 DOWNTO 0);
+            output : OUT STD_LOGIC_VECTOR (WIDTH - 1 DOWNTO 0));
+    END COMPONENT;
+    --===========================================================
     COMPONENT prime_fsm IS
         PORT (
             CLK : IN STD_LOGIC;
             RESET : IN STD_LOGIC;
             CE : IN STD_LOGIC;
             DATA_PRIME : IN STD_LOGIC_VECTOR(27 DOWNTO 0);
-            OUTPUT_CPT_ADR_PRIME : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
+            OUTPUT_CPT_ADR_PRIME : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
             OUTPUT_CPT_BOUCLE : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
 
             INIT_CPT_ADR_GRAPH : OUT STD_LOGIC;
@@ -88,20 +102,18 @@ ARCHITECTURE Behavioral OF prime_converter IS
             digit_out : OUT STD_LOGIC_VECTOR(15 DOWNTO 0));
     END COMPONENT;
     --===========================================================
-    SIGNAL adress_offset_graphic : unsigned(11 DOWNTO 0);
-    SIGNAL adress_offset_prime : unsigned(11 DOWNTO 0);
-    SIGNAL y_offset_graphic : unsigned(9 DOWNTO 0);
+    SIGNAL adress_offset_graphic : unsigned(11 DOWNTO 0) := to_unsigned(24, 12);
+    SIGNAL adress_offset_prime : STD_LOGIC_VECTOR(7 DOWNTO 0) := STD_LOGIC_VECTOR(to_unsigned(0, 8));
+    SIGNAL y_offset_graphic : unsigned(9 DOWNTO 0) := to_unsigned(30, 10);
+    SIGNAL x_offset_graphic : unsigned(9 DOWNTO 0) := to_unsigned(30, 10);
 
     SIGNAL INCR_CPT_Y : STD_LOGIC;
     SIGNAL digit_out_signal : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL digit_to_display : STD_LOGIC_VECTOR(3 DOWNTO 0);
-    -- SIGNAL digit0 : unsigned(3 DOWNTO 0);
-    -- SIGNAL digit1 : unsigned(3 DOWNTO 0);
-    -- SIGNAL digit2 : unsigned(3 DOWNTO 0);
-    -- SIGNAL digit3 : unsigned(3 DOWNTO 0);
+    SIGNAL input_number_to_digit : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
     SIGNAL output_counter_graphic : STD_LOGIC_VECTOR(11 DOWNTO 0);
-    SIGNAL output_counter_prime : STD_LOGIC_VECTOR(11 DOWNTO 0);
+    SIGNAL output_counter_prime : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL output_counter_boucle : STD_LOGIC_VECTOR(2 DOWNTO 0);
     SIGNAL output_counter_y : STD_LOGIC_VECTOR(9 DOWNTO 0);
 
@@ -132,7 +144,7 @@ BEGIN
     --===========================================================
     counter_address_prime : Nbit_counter
     GENERIC MAP(
-        WIDTH => 12
+        WIDTH => 8
     )
     PORT MAP(
         clk => clk,
@@ -141,7 +153,7 @@ BEGIN
         init => INIT_CPT_PRIME,
         incr => INCR_CPT_PRIME,
         load => LOAD_CPT_PRIME,
-        input => STD_LOGIC_VECTOR(adress_offset_prime),
+        input => adress_offset_prime,
         output => output_counter_prime);
     --===========================================================
     counter_boucle : Nbit_counter
@@ -158,9 +170,10 @@ BEGIN
         input => (OTHERS => '0'),
         output => output_counter_boucle);
     --===========================================================
-    counter_y_graphic : Nbit_counter
+    counter_y_graphic : Nbit_Nplus_counter
     GENERIC MAP(
-        WIDTH => 3
+        WIDTH => 10,
+        PLUS => 10
     )
     PORT MAP(
         clk => clk,
@@ -168,7 +181,7 @@ BEGIN
         ce => ce,
         init => '0',
         incr => INCR_CPT_Y,
-        load => '0',
+        load => LOAD_CPT_PRIME,--TODO rajouter sortie dedié dans fsm
         input => STD_LOGIC_VECTOR(y_offset_graphic),
         output => output_counter_y);
     --===========================================================
@@ -178,7 +191,7 @@ BEGIN
         RESET => reset,
         CE => ce,
         DATA_PRIME => prime_data_in,
-        OUTPUT_CPT_ADR_PRIME => output_counter_graphic,
+        OUTPUT_CPT_ADR_PRIME => output_counter_prime,
         OUTPUT_CPT_BOUCLE => output_counter_boucle,
         INIT_CPT_ADR_GRAPH => INIT_CPT_ADR_GRAPH,
         INIT_CPT_PRIME => INIT_CPT_PRIME,
@@ -196,22 +209,23 @@ BEGIN
         clk => clk,
         reset => reset,
         ce => ce,
-        number_in => prime_data_in,
+        number_in =>input_number_to_digit ,
         digit_out => digit_out_signal);
     --===========================================================
+    input_number_to_digit<="0000" & prime_data_in;
     --mux pour le bon chiffre
     --y decale en meme temps que le changement d'addresse prime
     INCR_CPT_Y <= INCR_CPT_PRIME;
     --x decale par le counter boucle
 
-    maj_chiffres : PROCESS (digit_out_signal)
+    maj_chiffres : PROCESS (output_counter_boucle, digit_out_signal)
     BEGIN
         CASE output_counter_boucle IS
-            WHEN "000" =>
+            WHEN "011" =>
                 digit_to_display <= digit_out_signal(3 DOWNTO 0);
-            WHEN "000" =>
+            WHEN "010" =>
                 digit_to_display <= digit_out_signal(7 DOWNTO 4);
-            WHEN "000" =>
+            WHEN "001" =>
                 digit_to_display <= digit_out_signal(11 DOWNTO 8);
             WHEN "000" =>
                 digit_to_display <= digit_out_signal(15 DOWNTO 12);
@@ -219,30 +233,15 @@ BEGIN
                 digit_to_display <= STD_LOGIC_VECTOR(to_unsigned(60, digit_to_display'length));
         END CASE;
     END PROCESS maj_chiffres;
-    -- maj_chiffres : PROCESS (CLK, RESET) IS--peut etre enlever et mettre juste un mux
-    -- BEGIN
-    --     IF (RESET = '1') THEN
-    --         digit0 <= "0000";
-    --         digit1 <= "0000";
-    --         digit2 <= "0000";
-    --         digit3 <= "0000";
-    --     ELSIF (CLK'event AND CLK = '1') THEN
-    --         IF (CE = '1') THEN
-    --             digit0 <= digit_out_signal(3 DOWNTO 0);
-    --             digit1 <= digit_out_signal(7 DOWNTO 4);
-    --             digit2 <= digit_out_signal(11 DOWNTO 8);
-    --             digit3 <= digit_out_signal(15 DOWNTO 12);
-    --         END IF;
-    --     END IF;
-    -- END PROCESS maj_chiffres;
 
     --==========================================================
     --creation de la data graphic
-    data_graphic(44)<='1';
-    data_graphic(43 DOWNTO 24)<=(OTHERS => '0');
-    data_graphic(23 DOWNTO 20)<=digit_to_display;--digit
-    data_graphic(19 DOWNTO 10)<=output_counter_y;--y
-    data_graphic(9 DOWNTO 0)<=output_counter_boucle;--x
+    data_graphic(47 DOWNTO 45) <= (OTHERS => '0');
+    data_graphic(44) <= '1';
+    data_graphic(43 DOWNTO 24) <= (OTHERS => '0');
+    data_graphic(23 DOWNTO 20) <= digit_to_display;--digit
+    data_graphic(19 DOWNTO 10) <= output_counter_y;--y
+    data_graphic(9 DOWNTO 0) <=STD_LOGIC_VECTOR(resize(unsigned(output_counter_boucle) * 6 + x_offset_graphic,10));--x TODO problem address incrémente de 1 au lieu de 7
     --==========================================================
     --CONNECTIONS
     address_graphic <= output_counter_graphic;
