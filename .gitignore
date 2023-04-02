@@ -1,2 +1,6 @@
 /src/_hdl_checker/
 *.asv
+_hdl_checker/cache.json
+_hdl_checker/cache.json
+_hdl_checker/cache.json
+*.~vsdx

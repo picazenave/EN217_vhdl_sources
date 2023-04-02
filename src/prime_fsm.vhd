@@ -64,6 +64,7 @@ ARCHITECTURE Behavioral OF prime_fsm IS
     end_state);
 
     SIGNAL pr_state, nx_state : Etat;
+    SIGNAL boucle_to_do : unsigned(2 DOWNTO 0) := to_unsigned(0, 3);
 BEGIN
 
     maj_etat : PROCESS (CLK, RESET) IS
@@ -81,6 +82,18 @@ BEGIN
     --===============================================================================
 
     ----------------------------------------------------------------------------------
+    --TODO
+    --permettrait de pas afficher les 0 devant les nombres
+
+    -- maj_boucle_todo : PROCESS (DATA_PRIME) IS
+    -- BEGIN
+    --     boucle_to_do<=
+    -- END PROCESS maj_boucle_todo;
+    ----------------------------------------------------------------------------------
+
+    --===============================================================================
+
+    ----------------------------------------------------------------------------------
     calc_new_state : PROCESS (pr_state, DATA_PRIME, OUTPUT_CPT_BOUCLE, OUTPUT_CPT_ADR_PRIME) IS
     BEGIN
         CASE pr_state IS
@@ -91,7 +104,7 @@ BEGIN
             WHEN loop_state =>
                 IF (DATA_PRIME = "0000000000000000000000000000") THEN
                     nx_state <= fetch_data_prime;
-                ELSIF (OUTPUT_CPT_ADR_PRIME = x"0A") THEN--TODO
+                ELSIF (OUTPUT_CPT_ADR_PRIME = x"66") THEN--TODO s'arrete à 45+57=45+debut data nb premier 0x66
                     nx_state <= end_state;
                 ELSE
                     nx_state <= copy_graphic;
@@ -110,7 +123,7 @@ BEGIN
                 nx_state <= fetch_data_prime;
                 ----------------------------------------------------------------------------------
             WHEN end_state =>
-                nx_state <= end_state;
+                nx_state <= fetch_data_prime;--TODO loop car le CPU va pas aussi vite donc s'arret trop vite sinon
         END CASE;
 
     END PROCESS calc_new_state;
@@ -202,7 +215,7 @@ BEGIN
                 INIT_CPT_PRIME <= '0';
                 INIT_CPT_BOUCLE <= '1';
 
-                INCR_CPT_ADR_GRAPH <= '1';
+                INCR_CPT_ADR_GRAPH <= '0';
                 INCR_CPT_PRIME <= '1';
                 INCR_CPT_BOUCLE <= '0';
 
@@ -217,7 +230,7 @@ BEGIN
                 INIT_CPT_PRIME <= '0';
                 INIT_CPT_BOUCLE <= '0';
 
-                INCR_CPT_ADR_GRAPH <= '1';
+                INCR_CPT_ADR_GRAPH <= '0';
                 INCR_CPT_PRIME <= '0';
                 INCR_CPT_BOUCLE <= '0';
 

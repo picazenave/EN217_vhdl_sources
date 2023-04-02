@@ -102,10 +102,10 @@ ARCHITECTURE Behavioral OF prime_converter IS
             digit_out : OUT STD_LOGIC_VECTOR(15 DOWNTO 0));
     END COMPONENT;
     --===========================================================
-    SIGNAL adress_offset_graphic : unsigned(11 DOWNTO 0) := to_unsigned(24, 12);
-    SIGNAL adress_offset_prime : STD_LOGIC_VECTOR(7 DOWNTO 0) := STD_LOGIC_VECTOR(to_unsigned(0, 8));
+    SIGNAL adress_offset_graphic : unsigned(11 DOWNTO 0) := to_unsigned(176, 12);
+    SIGNAL adress_offset_prime : STD_LOGIC_VECTOR(7 DOWNTO 0) := STD_LOGIC_VECTOR(to_unsigned(57, 8));
     SIGNAL y_offset_graphic : unsigned(9 DOWNTO 0) := to_unsigned(30, 10);
-    SIGNAL x_offset_graphic : unsigned(9 DOWNTO 0) := to_unsigned(30, 10);
+    SIGNAL x_offset_graphic : unsigned(9 DOWNTO 0) := to_unsigned(410, 10);
 
     SIGNAL INCR_CPT_Y : STD_LOGIC;
     SIGNAL digit_out_signal : STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -241,7 +241,7 @@ BEGIN
     data_graphic(43 DOWNTO 24) <= (OTHERS => '0');
     data_graphic(23 DOWNTO 20) <= digit_to_display;--digit
     data_graphic(19 DOWNTO 10) <= output_counter_y;--y
-    data_graphic(9 DOWNTO 0) <=STD_LOGIC_VECTOR(resize(unsigned(output_counter_boucle) * 6 + x_offset_graphic,10));--x TODO problem address incrémente de 1 au lieu de 7
+    data_graphic(9 DOWNTO 0) <=STD_LOGIC_VECTOR(resize(unsigned(output_counter_boucle) * 6 + x_offset_graphic,10));--x
     --==========================================================
     --CONNECTIONS
     address_graphic <= output_counter_graphic;

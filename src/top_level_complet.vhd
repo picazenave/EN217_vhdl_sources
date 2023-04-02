@@ -164,6 +164,47 @@ ARCHITECTURE Behavioral OF top_level_complet IS
     -- attribute mark_debug of sig_enable_drawing : signal is "true";
     -- attribute mark_debug of sig_data_from_memory : signal is "true";
 
+    --========================================================
+    --DEBUT COEUR CPU
+    --========================================================
+    COMPONENT Memory
+        PORT (
+            clk : IN STD_LOGIC;
+            ce : IN STD_LOGIC;
+            rw : IN STD_LOGIC;--R/=0 W=0
+            enable : IN STD_LOGIC;
+            address_read_only : IN STD_LOGIC_VECTOR(27 DOWNTO 0);
+            address : IN STD_LOGIC_VECTOR(27 DOWNTO 0);
+            input : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+            output_read_only : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+            output : OUT STD_LOGIC_VECTOR(31 DOWNTO 0));
+    END COMPONENT;
+
+    COMPONENT CPU
+        PORT (
+            CLK : IN STD_LOGIC;
+            RST : IN STD_LOGIC;
+            CE : IN STD_LOGIC;
+            DATA_FROM_MEMORY : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+            DATA_TO_MEMORY : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+            ADR_MEM : OUT STD_LOGIC_VECTOR (27 DOWNTO 0);
+            RW_MEMORY : OUT STD_LOGIC;
+            ENABLE_MEMORY : OUT STD_LOGIC);
+    END COMPONENT;
+
+    SIGNAL data_from_memory : STD_LOGIC_VECTOR (31 DOWNTO 0);
+    SIGNAL data_to_memory : STD_LOGIC_VECTOR (31 DOWNTO 0);
+    SIGNAL adr_mem : STD_LOGIC_VECTOR (27 DOWNTO 0);
+    SIGNAL rw_memory : STD_LOGIC;
+    SIGNAL enable_memory : STD_LOGIC;
+
+    SIGNAL address_read_only : STD_LOGIC_VECTOR (27 DOWNTO 0);
+    SIGNAL output_read_only : STD_LOGIC_VECTOR (31 DOWNTO 0);
+
+    --========================================================
+    --FIN COEUR CPU
+    --========================================================
+
 BEGIN
     --========================================================= 
     graphic_memory_component : graphic_memory
@@ -241,20 +282,49 @@ BEGIN
         clk => sig_clk,
         reset => sig_reset,
         ce => sig_ce,
-        prime_data_in => prime_data_in,
+        prime_data_in => output_read_only(27 DOWNTO 0),
         address_graphic => address_graphic,
         address_prime => address_prime,
         r_w_graphic => r_w_graphic,
         data_graphic => data_graphic);
     --=========================================================   
-    fake_memory : PROCESS (address_prime)
-    BEGIN
-        IF (unsigned(address_prime) < 2) THEN
-            prime_data_in <= STD_LOGIC_VECTOR(to_unsigned(1234, 28));
-        END IF;
-    END PROCESS fake_memory;
+    -- fake_memory : PROCESS (address_prime)
+    -- BEGIN
+    --     IF (unsigned(address_prime) < 2) THEN
+    --         prime_data_in <= STD_LOGIC_VECTOR(to_unsigned(1234, 28));
+    --     END IF;
+    -- END PROCESS fake_memory;
+    --=========================================================
+    --=========================================================
+    coeur_cpu : CPU
+    PORT MAP(
+        CLK => sig_clk,
+        RST => sig_reset,
+        CE => sig_ce,
+        DATA_FROM_MEMORY => data_from_memory,
+        DATA_TO_MEMORY => data_to_memory,
+        ADR_MEM => adr_mem,
+        RW_MEMORY => rw_memory,
+        ENABLE_MEMORY => enable_memory);
 
-    sig_ce <= cemodif;
+    Memory_CPU : Memory
+    PORT MAP(
+        clk => sig_clk,
+        ce => sig_ce,
+        rw => rw_memory,
+        enable => enable_memory,
+        address_read_only => x"00000" & address_prime,
+        address => adr_mem,
+        input => data_to_memory,
+        output_read_only => output_read_only,
+        output => data_from_memory);
+    --=========================================================
+    --=========================================================
+    --address_read_only<=x"00000" & address_prime;
+    --output_read_only<=x"0" & prime_data_in;
+
+    --sig_ce <= cemodif;
+    sig_ce <= ce25M;
     --sig_ce <= '1';
     sig_reset <= NOT (reset);
     sig_clk <= clk100M;

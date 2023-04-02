@@ -4,7 +4,7 @@ function [output] = char2glyph(input)
     if (input >= 97)
         output= input - 97 + 10;
     elseif (input >= 48) && (input <= 57)
-        output= input - 97;
+        output= input - 48;
     elseif(input==double(char(' ')))
        output= 36;
     else
