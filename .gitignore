@@ -4,3 +4,11 @@ _hdl_checker/cache.json
 _hdl_checker/cache.json
 _hdl_checker/cache.json
 *.~vsdx
+.settings/org.eclipse.core.resources.prefs
+.settings/com.sigasi.hdt.vhdl.version.prefs
+.project
+.library_mapping.xml
+src/.library_mapping.xml
+src/.project
+src/.settings/com.sigasi.hdt.vhdl.version.prefs
+src/.settings/org.eclipse.core.resources.prefs
