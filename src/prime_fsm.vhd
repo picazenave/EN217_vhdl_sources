@@ -104,7 +104,7 @@ BEGIN
             WHEN loop_state =>
                 IF (DATA_PRIME = "0000000000000000000000000000") THEN
                     nx_state <= fetch_data_prime;
-                ELSIF (OUTPUT_CPT_ADR_PRIME = x"66") THEN--TODO s'arrete à 45+57=45+debut data nb premier 0x66
+                ELSIF (OUTPUT_CPT_ADR_PRIME = x"F8") THEN--TODO s'arrete à 45+57=45+debut data nb premier 0x66
                     nx_state <= end_state;
                 ELSE
                     nx_state <= copy_graphic;

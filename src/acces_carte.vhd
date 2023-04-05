@@ -271,7 +271,7 @@ BEGIN
 
 	P2 : PROCESS (compt)
 	BEGIN--10hz
-		IF (compt(4 DOWNTO 0) = "10000") THEN
+		IF (compt(6 DOWNTO 0) = "1000000") THEN
 			S_8 <= '1';
 		ELSE
 			S_8 <= '0';

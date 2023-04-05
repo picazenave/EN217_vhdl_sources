@@ -2,8 +2,11 @@ close all
 clear
 clc
 
-img=imread("bongo_small.png");
+img=imread("courbe_prime_clk.png");
+img=img*255;
+img=flipdim(img ,2);           
 img_bw=img>200;
+img_bw=imresize(img_bw,630/1573);
 
 
 %imshow(uint8(img_bw*255))
@@ -36,7 +39,7 @@ x2=int32(0);
 y2=int32(0);
 found=false;
 % offset
-x_offset=10;
+x_offset=0;
 y_offset=300;
 % aaaaaa
 for i=1:w %each y
@@ -53,7 +56,7 @@ for i=1:w %each y
             fprintf("found x:%d x2:%d || y2:%d counter_line:%d\n",x,x2,y2,counter_line)
 
             %encode
-            if(abs(x-x2))
+          %  if(abs(x-x2))
                 line_vector(counter_line)=bitshift(1,43)+bitshift(1,42)+bitshift(y2+y_offset,30)+bitshift(x2+x_offset,20)+bitshift(y+y_offset,10)+x+x_offset;
 
                 % decode
@@ -69,7 +72,7 @@ for i=1:w %each y
                 counter_line=counter_line+1;
                 hold on
                 plot([x+x_offset x2+x_offset],[y+y_offset y2+y_offset])
-            end
+            %end
         end
         j=j+1;
     end
@@ -88,9 +91,9 @@ fprintf(fileID,"x""%012lx"",\n",nonzeros(line_vector));
 fclose(fileID);
 %plot(line_vector)
 %% encode phrase
-phrase="lorem ipsum dolor sit amet consectetur adipiscing elit";
-x=30;
-y=260;
+phrase="en217 processeur 32bits pour le calcul de nombres premiers";
+x=100;
+y=5;
 resultat_vector=zeros(100,1);
 lettres=double(char(phrase));
 for i=1:strlength(phrase)

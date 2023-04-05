@@ -69,7 +69,7 @@ ARCHITECTURE Behavioral OF drawing_entity IS
                         ready : OUT STD_LOGIC);
         END COMPONENT;
         --================================================================
-        COMPONENT primitive_drawing
+        COMPONENT line_drawing--primitive_drawing
                 PORT (
                         clk : IN STD_LOGIC;
                         ce : IN STD_LOGIC;
@@ -114,7 +114,7 @@ BEGIN
                 data_out => sig_data_out_glyph,
                 ready => ready_glyph);
         --================================================================
-        primitive_drawer : primitive_drawing
+        primitive_drawer : line_drawing
         PORT MAP(
                 clk => clk,
                 ce => ce,
