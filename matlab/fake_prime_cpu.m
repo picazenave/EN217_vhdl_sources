@@ -10,7 +10,7 @@ nb=1;
 cnt=1;
 
 
-while(nb<1200)
+while(nb<10000)
     clk=1;
     prime=true;
     while(i*i<nb)
@@ -22,7 +22,7 @@ while(nb<1200)
         clk=clk+1;
     end
     if prime
-        fprintf("%d est prime\n",nb)
+        %fprintf("%d est prime\n",nb)
         clk=clk+17;
         clk=clk*12+5+7;%nombre d'instructions * boucle + statique pour chaque init
         clk_count(cnt,1)=clk;
@@ -34,5 +34,7 @@ while(nb<1200)
     
 end
 plot(clk_count(:,2),clk_count(:,1))
+xlabel('Nombre premier') 
+ylabel('Nombre d''instructions') 
 %hist(clk_count(:,1))
 

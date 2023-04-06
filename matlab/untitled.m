@@ -2,17 +2,19 @@ close all
 clear
 clc
 
-img=imread("courbe_prime_clk.png");
-img=img*255;
-img=flipdim(img ,2);           
+img=imread("bongo_cat.png");
+img=imresize(img,.7);
+%img=img*255;
+%img=flipdim(img ,2);           
 img_bw=img>200;
-img_bw=imresize(img_bw,630/1573);
+
 
 
 %imshow(uint8(img_bw*255))
 figure
 subplot(2,1,1);
 imshow(img)
+title('Image originale')
 axis image
 
 
@@ -20,6 +22,7 @@ axis image
 subplot(2,1,2);
 img_1d=img_bw(:,:,1);
 imshow(uint8(img_1d*255))
+title('Image Binaire')
 axis image
 
 % img_edge=edge(img_1d);
@@ -30,17 +33,12 @@ img_1d=rot90(img_1d);
 %% find each line
 figure
 [h,w]=size(img_1d);
-found=false;
 counter_line=1;
 line_vector=zeros(1000,1);
-x=int32(0);
-y=int32(0);
-x2=int32(0);
-y2=int32(0);
-found=false;
+
 % offset
-x_offset=0;
-y_offset=300;
+x_offset=10;
+y_offset=230;
 % aaaaaa
 for i=1:w %each y
     j=1;
@@ -77,6 +75,7 @@ for i=1:w %each y
         j=j+1;
     end
 end
+title('Image vectorisée')
 axis image
 %% print all lines
 % for i=1:size(line_vector)
@@ -92,8 +91,8 @@ fclose(fileID);
 %plot(line_vector)
 %% encode phrase
 phrase="en217 processeur 32bits pour le calcul de nombres premiers";
-x=100;
-y=5;
+x=240;
+y=10;
 resultat_vector=zeros(100,1);
 lettres=double(char(phrase));
 for i=1:strlength(phrase)

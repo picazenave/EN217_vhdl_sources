@@ -112,7 +112,7 @@ ARCHITECTURE Behavioral OF prime_converter IS
         );
     end component Nbit_divider;
     --===========================================================
-    SIGNAL adress_offset_graphic : unsigned(11 DOWNTO 0)        := to_unsigned(2262, 12);
+    SIGNAL adress_offset_graphic : unsigned(11 DOWNTO 0)        := to_unsigned(1778, 12);
     SIGNAL adress_offset_prime   : STD_LOGIC_VECTOR(7 DOWNTO 0) := STD_LOGIC_VECTOR(to_unsigned(56, 8));
     SIGNAL y_offset_graphic      : unsigned(9 DOWNTO 0)         := to_unsigned(30, 10);
     SIGNAL x_offset_graphic      : unsigned(9 DOWNTO 0)         := to_unsigned(340, 10);
