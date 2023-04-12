@@ -3,19 +3,21 @@ clear
 clc
 
 img=imread("bongo_cat.png");
-img=imresize(img,.7);
-%img=img*255;
-%img=flipdim(img ,2);           
-img_bw=img>200;
-
-
-
 %imshow(uint8(img_bw*255))
 figure
 subplot(2,1,1);
 imshow(img)
 title('Image originale')
 axis image
+
+%resize and format
+img=imresize(img,.7);
+%img=img*255;
+img=flip(img ,2);           
+img_bw=img>200;
+
+
+
 
 
 %% make 1d bw image and edge
